@@ -11,7 +11,6 @@ export default function drawTable(data) {
   for (const trContent of data) {
     const tr = document.createElement('tr');
     for (let i = 0; i < Object.entries(trContent).length; i += 1) {
-      // tr.dataset[Object.entries(trContent)[i][0]] = Object.entries(trContent)[i][1];
       const [key, value] = Object.entries(trContent)[i];
       tr.dataset[key] = value;
 
