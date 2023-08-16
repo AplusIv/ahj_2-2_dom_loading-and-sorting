@@ -1,51 +1,18 @@
-/* ??? Можно ли написать универсальную функцию для сравнения?
-Куда передаётся дополнительный третий data-параметр в зависимости от конкретной сортировки.
-У меня не вышло. В метод sort мне его потом не передать при сортировке
-*/
-
-export function compareAscendingById(a, b) {
-  if (a.dataset.id && b.dataset.id) {
-    const number1 = a;
-    const number2 = b;
-
-    number1.dataset.id = Number(number1.dataset.id);
-    number2.dataset.id = Number(number2.dataset.id);
-
-    return number1.dataset.id - number2.dataset.id;
-  }
-  return false;
+export function dataStringSort(a, b) {
+  if (a.dataset.title > b.dataset.title) return 1; // если первое значение больше второго
+  if (a.dataset.title === b.dataset.title) return 0; // если равны
+  if (a.dataset.title < b.dataset.title) return -1; // если первое значение меньше второго
+  return true;
 }
 
-export function compareAscendingByTitle(a, b) {
-  if (a.dataset.title && b.dataset.title) {
-    return a.dataset.title.localeCompare(b.dataset.title); // более грамотное сравнение строк,
-    // учитывающее дополнителье символы и особенности языка
+export default function someSort(arr, sorter, ASC = true) {
+  if (sorter === 'title') {
+    if (ASC) return [...arr].sort(dataStringSort);
+    return [...arr].sort(dataStringSort).reverse();
   }
-  return false;
-}
-
-export function compareAscendingByImdb(a, b) {
-  if (a.dataset.imdb && b.dataset.imdb) {
-    const number1 = a;
-    const number2 = b;
-
-    number1.dataset.imdb = Number(number1.dataset.imdb);
-    number2.dataset.imdb = Number(number2.dataset.imdb);
-
-    return a.dataset.imdb - b.dataset.imdb;
-  }
-  return false;
-}
-
-export function compareAscendingByYear(a, b) {
-  if (a.dataset.year && b.dataset.year) {
-    const number1 = a;
-    const number2 = b;
-
-    number1.dataset.year = Number(number1.dataset.year);
-    number2.dataset.year = Number(number2.dataset.year);
-
-    return a.dataset.year - b.dataset.year;
-  }
-  return false;
+  return [...arr].sort((a, b) => {
+    const aData = Number(a.dataset[sorter]);
+    const bData = Number(b.dataset[sorter]);
+    return (ASC) ? aData - bData : bData - aData;
+  });
 }

@@ -1,105 +1,50 @@
 import data from './data/data.json';
 import drawTable from './drawTable';
-import {
-  compareAscendingById,
-  compareAscendingByImdb,
-  compareAscendingByTitle,
-  compareAscendingByYear,
-} from './compareFunctions';
+
+import someSort from './compareFunctions';
 import { showArrowMarker, deleteArrowMarker } from './arrowMarker';
 
 document.body.insertBefore(drawTable(data), document.body.firstElementChild.nextElementSibling);
 const table = document.querySelector('table');
 
-// ??? Единый интервал не понял, как сделать. Таймауты начинают не успевать за сменой интервалов
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingById);
-  for (const row of sorted) {
-    table.appendChild(row);
-  }
+const rows = table.querySelectorAll('tr');
 
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8593, table, 'id');
+let counter = 0;
+let switcher = true;
+
+const filters = ['id', 'title', 'imdb', 'year'];
+
+setInterval(() => {
+  const filterIndex = Math.floor((counter / filters.length) * 2);
+  if (counter < 8) {
+    const sorted = someSort([...rows].slice(1), filters[filterIndex], switcher);
+    for (const row of sorted) {
+      table.appendChild(row);
+    }
+
+    deleteArrowMarker(8593, table);
+    deleteArrowMarker(8595, table);
+
+    switch (switcher) {
+      case true: showArrowMarker(8593, table, filters[filterIndex]);
+        break;
+      default: showArrowMarker(8595, table, filters[filterIndex]);
+        break;
+    }
+
+    counter += 1;
+    /* console.log('index = ' + filterIndex);
+    console.log('filter = ' + filters[filterIndex]);
+    console.log('switcher = ' + switcher);
+    console.log('counter = ' + counter); */
+    if (switcher) {
+      switcher = false;
+    } else {
+      switcher = true;
+    }
+
+    if (counter === 8) {
+      counter = 0;
+    }
+  }
 }, 2000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingById); // По убыванию
-  const reversed = [sorted[0], ...sorted.slice(1).reverse(sorted)];
-  for (const row of reversed) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8595, table, 'id');
-}, 4000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByTitle);
-  for (const row of sorted) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8593, table, 'title');
-}, 6000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByTitle); // По убыванию
-  const reversed = [sorted[0], ...sorted.slice(1).reverse(sorted)];
-  for (const row of reversed) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8595, table, 'title');
-}, 8000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByImdb);
-  for (const row of sorted) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8593, table, 'imdb');
-}, 10000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByImdb); // По убыванию
-  const reversed = [sorted[0], ...sorted.slice(1).reverse(sorted)];
-  for (const row of reversed) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8595, table, 'imdb');
-}, 12000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByYear);
-  for (const row of sorted) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8593, table, 'year');
-}, 14000);
-
-setTimeout(() => {
-  const sorted = [...table.querySelectorAll('tr')].sort(compareAscendingByYear); // По убыванию
-  const reversed = [sorted[0], ...sorted.slice(1).reverse(sorted)];
-  for (const row of reversed) {
-    table.appendChild(row);
-  }
-
-  deleteArrowMarker(8593, table);
-  deleteArrowMarker(8595, table);
-  showArrowMarker(8595, table, 'year');
-}, 16000);
