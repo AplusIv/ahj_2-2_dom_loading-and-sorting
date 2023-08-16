@@ -15,7 +15,8 @@ let switcher = true;
 const filters = ['id', 'title', 'imdb', 'year'];
 
 setInterval(() => {
-  const filterIndex = Math.floor((counter / filters.length) * 2);
+  // eslint-disable-next-line no-mixed-operators
+  const filterIndex = Math.floor(counter / filters.length * 2);
   if (counter < 8) {
     const sorted = someSort([...rows].slice(1), filters[filterIndex], switcher);
     for (const row of sorted) {
@@ -33,10 +34,7 @@ setInterval(() => {
     }
 
     counter += 1;
-    /* console.log('index = ' + filterIndex);
-    console.log('filter = ' + filters[filterIndex]);
-    console.log('switcher = ' + switcher);
-    console.log('counter = ' + counter); */
+
     if (switcher) {
       switcher = false;
     } else {
